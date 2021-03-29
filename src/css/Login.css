@@ -1,0 +1,20 @@
+.content-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../images/background.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.erroLogin {
+  display: inline;
+  width: 100%;
+}
+
+.invisibleError {
+  display: none;
+}
