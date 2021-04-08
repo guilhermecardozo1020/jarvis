@@ -1,0 +1,25 @@
+.overlay {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    background-color: rgba(0,0,0,.3);
+  }
+.icon-banner {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.flex-banner {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+.item-flex-banner {
+    flex: 0 1 auto;
+    padding: 24px;
+}

@@ -9,26 +9,18 @@ import ExitToApp from "@material-ui/icons/ExitToApp";
 import Imagem from '../images/icone_banner.svg'
 import { useHistory } from 'react-router-dom'
 import Firebase from '../services/FirebaseConnect'
+import '../css/Banner.css'
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedPost: {
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
     backgroundImage: `url(${Background})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     borderRadius: '0px',
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    backgroundColor: 'rgba(0,0,0,.3)',
   },
   mainFeaturedPostContent: {
     position: 'relative',
@@ -38,10 +30,6 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: 0,
     paddingTop: '5px',
     },
-  },
-  imagem: {
-    maxWidth: '80px',
-    maxHeight: '80px',
   },
   button: {
     color: '#fff',
@@ -56,22 +44,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#076d07",
     },
   },
-  grid: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignContent: 'center',
-  },
-  item: {
-    flex: '0 1 auto',
-    padding: '24px',
-  }
 }));
 
 export default function Home(props) {
   const classes = useStyles();
-
   let history = useHistory();
 
   const logoff = () => {
@@ -87,14 +63,14 @@ export default function Home(props) {
   }
   return (
     <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${props.image})` }}>
-      <div className={classes.overlay} />
-      <div className={classes.grid}>
-        <div className={classes.item}>
+      <div className="overlay" />
+      <div className="flex-banner">
+        <div className="item-flex-banner">
           <img src={Imagem} 
           alt="Imagem ilustrativa de um relógio em funcionamento." 
-          className={classes.imagem}/>
+          className="icon-banner"/>
         </div>
-        <div className={classes.item}>
+        <div className="item-flex-banner">
           <Button 
             onClick={logoff}
             startIcon={<ExitToApp/>} 
