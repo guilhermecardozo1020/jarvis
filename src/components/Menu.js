@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import HomeIcon from '@material-ui/icons/Home';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import PeopleIcon from '@material-ui/icons/People';
-
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
@@ -16,12 +16,12 @@ const useStyles = makeStyles({
   },
 });
 
-const CssTextField = withStyles({
+const CssTab = withStyles({
   root: {
       '& .MuiTab-textColorSecondary.Mui-selected': {
           color: '#007f00',
       },
-      '& .PrivateTabIndicator-colorSecondary-8': {
+      '& .PrivateTabIndicator-colorSecondary-8, .PrivateTabIndicator-colorSecondary-25': {
         backgroundColor: '#007f00',
       },
       '& .MuiTab-textColorSecondary': {
@@ -37,17 +37,26 @@ const CssTextField = withStyles({
   },
 })(Tabs);
 
-export default function Menu() {
+export default function Menu(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  let history = useHistory();
+  const [value, setValue] = React.useState(props.tabAtiva);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const colaboradores = () => {
+    history.push("/colaboradores")
+  }
+
+  const home = () => {
+    history.push("/home")
+  }
+
   return (
     <Paper square className={classes.root}>
-      <CssTextField
+      <CssTab
         value={value}
         onChange={handleChange}
         variant="fullWidth"
@@ -55,10 +64,10 @@ export default function Menu() {
         textColor="secondary"
         aria-label="icon label tabs example"
       >
-        <Tab icon={<HomeIcon />} label="Home" />
-        <Tab icon={<QueryBuilderIcon />} label="Escala" />
-        <Tab icon={<PeopleIcon />} label="Colaboradores" />
-      </CssTextField>
+        <Tab onClick={home} icon={<HomeIcon />} label="Home"/>
+        <Tab icon={<QueryBuilderIcon />} label="Escala" disabled/>
+        <Tab onClick={colaboradores} icon={<PeopleIcon />} label="Colaboradores" />
+      </CssTab>
     </Paper>
   );
 }
