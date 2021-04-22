@@ -3,42 +3,24 @@ import React from "react";
 //Card
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-
 import CardContent from "@material-ui/core/CardContent";
 import Fab from "@material-ui/core/Fab";
-
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
-
 import red from "@material-ui/core/colors/red";
-
 import blue from "@material-ui/core/colors/blue";
-import SearchIcon from "@material-ui/icons/Search";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
-import CollectionsIcon from "@material-ui/icons/Collections";
-
-
-
 // Search
-import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 import ReplayIcon from "@material-ui/icons/Replay";
-
 //Tabs
 import { withStyles } from "@material-ui/core/styles";
-
-
 
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end"
+    width: "100%",
+    marginTop: '20px'
   },
   icon: {
     margin: theme.spacing.unit * 2
@@ -75,25 +57,6 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     backgroundColor: "default"
   },
-
-  searchRoot: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400
-  },
-  searchInput: {
-    marginLeft: 8,
-    flex: 1
-  },
-  searchIconButton: {
-    padding: 10
-  },
-  searchDivider: {
-    width: 1,
-    height: 28,
-    margin: 4
-  }
 });
 
 class ImageUploadCard extends React.Component {
@@ -114,7 +77,7 @@ class ImageUploadCard extends React.Component {
         selectedFile: [reader.result]
       });
     }.bind(this);
-    console.log(url); // Would see a path?
+    console.log(url);
 
     this.setState({
       mainState: "uploaded",
@@ -123,21 +86,8 @@ class ImageUploadCard extends React.Component {
     });
   };
 
-  handleSearchClick = event => {
-    this.setState({
-      mainState: "search"
-    });
-  };
-
-  handleGalleryClick = event => {
-    this.setState({
-      mainState: "gallery"
-    });
-  };
-
   renderInitialState() {
     const { classes } = this.props;
-
     return (
       <React.Fragment>
         <CardContent>
@@ -155,78 +105,9 @@ class ImageUploadCard extends React.Component {
                 <AddPhotoAlternateIcon />
               </Fab>
             </label>
-            <Fab className={classes.button} onClick={this.handleSearchClick}>
-              <SearchIcon />
-            </Fab>
-            <Fab className={classes.button} onClick={this.handleGalleryClick}>
-              <CollectionsIcon />
-            </Fab>
           </Grid>
         </CardContent>
       </React.Fragment>
-    );
-  }
-
-  handleSearchURL = event => {
-    console.log();
-    var file = event.target.files[0];
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
-
-    reader.onloadend = function(e) {
-      this.setState({
-        selectedFile: [reader.result]
-      });
-    }.bind(this);
-    console.log(url); // Would see a path?
-
-    this.setState({
-      selectedFile: event.target.files[0],
-      imageUploaded: 1
-    });
-  };
-
-  handleImageSearch(url) {
-    var filename = url.substring(url.lastIndexOf("/") + 1);
-    console.log(filename);
-    this.setState({
-      mainState: "uploaded",
-      imageUploaded: true,
-      selectedFile: url,
-      fileReader: undefined,
-      filename: filename
-    });
-  }
-
-  handleSeachClose = event => {
-    this.setState({
-      mainState: "initial"
-    });
-  };
-
-  renderSearchState() {
-    const { classes } = this.props;
-
-    return (
-      <Paper className={classes.searchRoot} elevation={1}>
-        <InputBase className={classes.searchInput} placeholder="Image URL" />
-        <IconButton
-          className={classes.button}
-          aria-label="Search"
-          onClick={this.handleImageSearch}
-        >
-          <SearchIcon />
-        </IconButton>
-        <Divider className={classes.searchDivider} />
-        <IconButton
-          color="primary"
-          className={classes.secondaryButton}
-          aria-label="Close"
-          onClick={this.handleSeachClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Paper>
     );
   }
 
@@ -255,18 +136,6 @@ class ImageUploadCard extends React.Component {
         <Avatar src={url} />
       </div>
     ));
-
-    /*const listItems = this.props.imageGallery.map(url => (
-      <div
-        onClick={value => this.handleAvatarClick({ url })}
-        style={{
-          padding: "5px 5px 5px 5px",
-          cursor: "pointer"
-        }}
-      >
-        <Avatar shape="square" size={100} src={url} />
-      </div>
-    ));*/
 
     return (
       <React.Fragment>
@@ -318,7 +187,6 @@ class ImageUploadCard extends React.Component {
         <div className={classes.root}>
           <Card className={this.props.cardName}>
             {(this.state.mainState === "initial" && this.renderInitialState()) ||
-              (this.state.mainState === "search" && this.renderSearchState()) ||
               (this.state.mainState === "gallery" &&
                 this.renderGalleryState()) ||
               (this.state.mainState === "uploaded" &&

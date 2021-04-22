@@ -21,7 +21,7 @@ const CssTab = withStyles({
       '& .MuiTab-textColorSecondary.Mui-selected': {
           color: '#007f00',
       },
-      '& .PrivateTabIndicator-colorSecondary-8, .PrivateTabIndicator-colorSecondary-25': {
+      '& [data-info~="PrivateTabIndicator-colorSecondary"]': {
         backgroundColor: '#007f00',
       },
       '& .MuiTab-textColorSecondary': {
@@ -42,7 +42,7 @@ export default function Menu(props) {
   let history = useHistory();
   const [value, setValue] = React.useState(props.tabAtiva);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
 
@@ -57,6 +57,9 @@ export default function Menu(props) {
   return (
     <Paper square className={classes.root}>
       <CssTab
+        TabIndicatorProps={{
+          style: { background: "#007f00"}
+        }}
         value={value}
         onChange={handleChange}
         variant="fullWidth"
