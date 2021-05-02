@@ -30,8 +30,15 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import 'date-fns';
 
-
+import { ptBR } from "date-fns/locale";
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -122,7 +129,6 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 export default function Colaboradores() {
-
     const [lista, setLista] = useState([])
     useLayoutEffect(() => {
         Firebase    
@@ -130,23 +136,26 @@ export default function Colaboradores() {
             .ref(`/colaboradores`)
             .on('value', snapchot => {
                 //converter objetos em listas
-                let dados = snapchot.val()
-                const keys = Object.keys(dados)
-                const lista = keys.map((key) => {
-                    return {...dados[key], id:key}
-                })
-                setLista(lista)
-                console.log(lista)
+                if (snapchot.val()) {
+                    let dados = snapchot.val()
+                    const keys = Object.keys(dados)
+                    const lista = keys.map((key) => {
+                        return {...dados[key], id:key}
+                    })
+                    setLista(lista)
+                }
             })
     }, [])
 
     const classes = useStyles();
+    const [user, setUser] = useState();
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
+        limpar()
     };
 
     const [nome, setNome] = useState("")
@@ -155,12 +164,25 @@ export default function Colaboradores() {
     const [jornada, setJornada] = useState()
     const [intervalo, setIntervalo] = useState()
     const [statusColaborador, setStatusColaborador] = useState("")
+    const [botaoModalColaborador, setBotaoModalColaborador] = useState("Cadastrar")
+    const [dataInicial, setDataInicial] = useState(new Date());
+    const [dataFinal, setDataFinal] = useState(new Date());
+
+    const handleDataInicial = (date) => {
+        setDataInicial(date);
+    };
+    const handleDataFinal = (date) => {
+        setDataFinal(date);
+    };
+
     const limpar = () => {
         setNome("")
         setEmail("")
         setTelefone("")
         setJornada()
         setIntervalo()
+        setDataInicial()
+        setDataFinal()
         setStatusColaborador("")
     }
 
@@ -171,20 +193,48 @@ export default function Colaboradores() {
             telefone: telefone,
             jornada: jornada,
             intervalo: intervalo,
+            dataInicial: dataInicial,
+            dataFinal: dataFinal,
             statusColaborador: statusColaborador,
         }
-        let code = uuidv4()
-        Firebase
-            .database()
-            .ref(`colaboradores/${code}`)
-            .set(objeto)
-            .then(() => {
-                limpar()
-            })
-            .catch((erro) => {
-                console.log(erro)
-            })
-        handleClose()
+        if(botaoModalColaborador == 'Cadastrar') {
+            let code = uuidv4()
+            Firebase
+                .database()
+                .ref(`colaboradores/${code}`)
+                .set(objeto)
+                .then(() => {
+                    limpar()
+                })
+                .catch((erro) => {
+                    console.log(erro)
+                })
+            handleClose()
+        } else {
+            let users = user
+            Firebase
+                .database()
+                .ref(`colaboradores/${users}`)
+                .update(objeto)
+                .then(() => {
+                    limpar()
+                })
+            handleClose()
+        }
+
+    }
+    const editarDadosColaborador = (item) => {
+        setNome(item.nome)
+        setEmail(item.email)
+        setTelefone(item.telefone)
+        setJornada(item.jornada)
+        setIntervalo(item.intervalo)
+        setStatusColaborador(item.statusColaborador)
+        setDataInicial(item.dataInicial)
+        setDataFinal(item.dataFinal)
+        setUser(item.id);
+        setBotaoModalColaborador('Salvar')
+        handleClickOpen()
     }
     return (
         <div>
@@ -243,37 +293,68 @@ export default function Colaboradores() {
                         autoComplete="Telefone"
                     />
                     <form className={classes.formJornada} noValidate>
-                    <TextField 
-                        id="jornada"
-                        label="Jornada"
-                        type="time"
-                        defaultValue="00:00"
-                        value={jornada}
-                        onChange={(e) => setJornada(e.target.value)}
-                        className={classes.textField}
-                        InputLabelProps={{
-                        shrink: true
-                        }}
-                        inputProps={{
-                        step: 300
-                        }}
-                    />
-                    <TextField 
-                        id="time"
-                        label="Intervalo"
-                        type="time"
-                        defaultValue="00:00"
-                        value={intervalo}
-                        onChange={(e) => setIntervalo(e.target.value)}
-                        className={classes.textField}
-                        InputLabelProps={{
-                        shrink: true
-                        }}
-                        inputProps={{
-                        step: 300
-                        }}
-                    />
+                        <TextField 
+                            id="jornada"
+                            label="Jornada"
+                            type="time"
+                            defaultValue="00:00"
+                            value={jornada}
+                            onChange={(e) => setJornada(e.target.value)}
+                            className={classes.textField}
+                            InputLabelProps={{
+                            shrink: true
+                            }}
+                            inputProps={{
+                            step: 300
+                            }}
+                        />
+                        <TextField 
+                            id="time"
+                            label="Intervalo"
+                            type="time"
+                            defaultValue="00:00"
+                            value={intervalo}
+                            onChange={(e) => setIntervalo(e.target.value)}
+                            className={classes.textField}
+                            InputLabelProps={{
+                            shrink: true
+                            }}
+                            inputProps={{
+                            step: 300
+                            }}
+                        />
                     </form>
+                    <InputLabel className={classes.inputLabel} shrink>
+                            Inserir Período de Ausência
+                        </InputLabel>
+                    <div className={classes.formJornada} noValidate>
+                    <MuiPickersUtilsProvider locale={ptBR} utils={DateFnsUtils}>
+                        <Grid >
+                            <KeyboardDatePicker
+                            margin="normal"
+                            label="Data início"
+                            format="dd/MM/yyyy"
+                            value={dataInicial}
+                            onChange={handleDataInicial}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            />
+                        </Grid>
+                        <Grid>
+                            <KeyboardDatePicker
+                            margin="normal"
+                            label="Data fim"
+                            format="dd/MM/yyyy"
+                            value={dataFinal}
+                            onChange={handleDataFinal}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            />
+                        </Grid>
+                    </MuiPickersUtilsProvider>
+                    </div>
                     <FormControl className={classes.formControl}>
                         <InputLabel className={classes.inputLabel} shrink>
                             Status
@@ -310,7 +391,7 @@ export default function Colaboradores() {
                         variant="contained" 
                         startIcon={<SaveIcon style={{fontSize: '25px'}}/>} 
                         className={classes.button}>
-                        Cadastrar
+                        {botaoModalColaborador}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -321,32 +402,35 @@ export default function Colaboradores() {
                 </Typography>
                 <Search></Search>
                 { lista.map((item, key) => {
-                return <Paper className={classes.contentPaperColaboradores} elevation={2}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <List className={classes.root}>
-                        <ListItem key={key} alignItems="flex-start">
-                            <ListItemAvatar className={classes.avatarColaborador}>
-                                <Avatar alt="Remy Sharp" src={ImagemAvatar} className={classes.large} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={item.nome}
-                                secondary={
-                                    <React.Fragment>
-                                    <Typography component="span" className={classes.inline} color="textPrimary">
-                                        Jornada de {item.jornada}
-                                    </Typography>
-                                    </React.Fragment>
-                                }
-                            />
-                        </ListItem>
-                    </List>
+                    return item.statusColaborador == 'Ativo' ? <Paper className={classes.contentPaperColaboradores} elevation={2}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <List className={classes.root}>
+                            <ListItem key={key} alignItems="flex-start">
+                                <ListItemAvatar className={classes.avatarColaborador}>
+                                    <Avatar alt="Remy Sharp" src={ImagemAvatar} className={classes.large} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={item.nome}
+                                    secondary={
+                                        <React.Fragment>
+                                        <Typography component="span" className={classes.inline} color="textPrimary">
+                                            Jornada de {item.jornada}
+                                        </Typography>
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
+                        </List>
                     <Button style={{margin: '15px', padding: '0px'}}
                         variant="contained" 
-                        className={classes.button}>
+                        className={classes.button}
+                        onClick={() => editarDadosColaborador(item)}
+                        >
                             <VisibilityIcon style={{fontSize: '25px', }}/>
                     </Button>
                     </div>
-                </Paper>
+                </Paper>:
+                <div></div>
                 })}
             </div>
         </div>

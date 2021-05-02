@@ -128,6 +128,7 @@ function Login() {
             .signInWithEmailAndPassword(email, senha)
             .then((retorno) => {
                 sessionStorage.setItem("uid", retorno.user.uid)
+                console.log(retorno.user)
                 if (lembreme === true) {
                     localStorage.setItem("email", email)
                     localStorage.setItem("senha", senha)
