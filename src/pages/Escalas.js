@@ -191,7 +191,7 @@ export default function Colaboradores() {
             <Banner
                 image={ImagemBanner}
             />
-            <Menu tabAtiva={2}/>
+            <Menu tabAtiva={1}/>
             <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'flex-end', alignItems: 'center'}}>
                 <div className="item-flex-banner">
                     <Button 
