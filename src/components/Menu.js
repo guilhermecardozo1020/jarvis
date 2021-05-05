@@ -54,6 +54,10 @@ export default function Menu(props) {
     history.push("/home")
   }
 
+  const escalas = () => {
+    history.push("/escalas")
+  }
+
   return (
     <Paper square className={classes.root}>
       <CssTab
@@ -68,7 +72,7 @@ export default function Menu(props) {
         aria-label="icon label tabs example"
       >
         <Tab onClick={home} icon={<HomeIcon />} label="Home"/>
-        <Tab icon={<QueryBuilderIcon />} label="Escala" disabled/>
+        <Tab onClick={escalas} icon={<QueryBuilderIcon />} label="Gerar Escalas"/>
         <Tab onClick={colaboradores} icon={<PeopleIcon />} label="Colaboradores" />
       </CssTab>
     </Paper>

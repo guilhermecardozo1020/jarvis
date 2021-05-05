@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Colaboradores from './pages/Colaboradores'
+import Escalas from './pages/Escalas'
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/" exact={true} component={Login} />
         <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/colaboradores" component={Colaboradores} />
+        <PrivateRoute path="/escalas" component={Escalas}/>
       </Switch>
     </BrowserRouter>
   )
