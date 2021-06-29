@@ -197,7 +197,7 @@ export default function Colaboradores() {
             dataFinal: dataFinal,
             statusColaborador: statusColaborador,
         }
-        if(botaoModalColaborador == 'Cadastrar') {
+        if(botaoModalColaborador === 'Cadastrar') {
             let code = uuidv4()
             Firebase
                 .database()
@@ -402,7 +402,7 @@ export default function Colaboradores() {
                 </Typography>
                 <Search></Search>
                 { lista.map((item, key) => {
-                    return item.statusColaborador == 'Ativo' ? <Paper className={classes.contentPaperColaboradores} elevation={2}>
+                    return item.statusColaborador === 'Ativo' ? <Paper className={classes.contentPaperColaboradores} elevation={2}>
                         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <List className={classes.root}>
                             <ListItem key={key} alignItems="flex-start">
