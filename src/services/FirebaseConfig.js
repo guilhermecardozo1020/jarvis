@@ -1,10 +1,10 @@
 var firebaseConfig = {
-    apiKey: "AIzaSyDg6oa8uXbOhTiOlWPvCj_b9YmMSk5pOOQ",
-    authDomain: "jarvis-55fb0.firebaseapp.com",
-    projectId: "jarvis-55fb0",
-    storageBucket: "jarvis-55fb0.appspot.com",
-    messagingSenderId: "852060644854",
-    appId: "1:852060644854:web:dd121aeab5c0cfe4a753d7"
+    apiKey: "AIzaSyAGxUcFphoTRc0yZmnnbif2IjELxSZJkcI",
+    authDomain: "jarvis-project-final.firebaseapp.com",
+    projectId: "jarvis-project-final",
+    storageBucket: "jarvis-project-final.appspot.com",
+    messagingSenderId: "513220715001",
+    appId: "1:513220715001:web:cd38cb831bb60e85ebdd28"
   };
-  
+
  export default firebaseConfig;
